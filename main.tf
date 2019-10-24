@@ -7,8 +7,8 @@ provider "google" {
 
 resource "google_compute_instance" "elk" {
   name         = "${var.elk_instance_name}"
-  machine_type = "n1-standard-1"
-  zone         = "us-east1-b"
+  machine_type = "${var.elk_instance_machine_type}"
+  zone         = "${var.elk_instance_zone}"
 
   tags = ["http-server", "https-server"]
 
