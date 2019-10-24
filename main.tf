@@ -5,12 +5,17 @@ provider "google" {
 }
 
 
+resource "google_compute_address" "elkip" {
+  name   = "${var.elk_instance_ip_name}"
+  region = "${var.elk_instance_ip_region}"
+}
+
 resource "google_compute_instance" "elk" {
   name         = "${var.elk_instance_name}"
   machine_type = "${var.elk_instance_machine_type}"
   zone         = "${var.elk_instance_zone}"
 
-  tags = ["http-server", "https-server"]
+  tags = ["http-server"]
 
   boot_disk {
     initialize_params {
@@ -30,6 +35,9 @@ resource "google_compute_instance" "elk" {
 
     access_config {
       // Ephemeral IP
+      
+      nat_ip       = "${google_compute_address.elkip.address}"
+      network_tier = "PREMIUM"
     }
   }
 
